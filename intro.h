@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 
 #include "no_mnemonic_page.h"
+#include "personal_cabinet.h"
 
 #include "./Unit/libdevcore/bip44/BIP44.hpp"
 #include "./Unit/libdevcore/bip44/BIP39.hpp"
@@ -57,7 +58,7 @@ public:
     QPushButton *m_button;
     QStackedWidget *stk;
     no_mnemonic_page mnemonic_page;
-//    personalCabinet personal;
+    personal_cabinet personal;
     QSettings settings;
     QShortcut *keyCtrlw ;
     unit::BasicDB blockWriter;

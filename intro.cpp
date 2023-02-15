@@ -75,9 +75,9 @@ intro::intro(QWidget *parent)
     keyCtrlw->setKey(Qt::CTRL + Qt::Key_W);
 
     ui->stackedWidget->insertWidget(1, &mnemonic_page);
-//    ui->stackedWidget->insertWidget(2, &personal);
+    ui->stackedWidget->insertWidget(2, &personal);
 
-
+    connect(ui->pshButton_check_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_check_mnemonic_clicked()));
     connect(ui->pshButton_no_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_no_mnemonic_clicked()));
     connect(&mnemonic_page, SIGNAL(HomeClicked()), this, SLOT(moveHome()));
     connect(keyCtrlw, SIGNAL(activated()), this, SLOT(slotShortcutCtrlw()));
