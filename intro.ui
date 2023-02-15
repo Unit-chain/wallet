@@ -100,9 +100,12 @@
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>40</width>
+                    <width>120</width>
                     <height>20</height>
                    </size>
                   </property>
@@ -140,9 +143,12 @@ font: inherit;</string>
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>40</width>
+                    <width>120</width>
                     <height>20</height>
                    </size>
                   </property>
@@ -173,9 +179,12 @@ font: inherit;</string>
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>40</width>
+                    <width>120</width>
                     <height>20</height>
                    </size>
                   </property>
@@ -207,9 +216,12 @@ font: inherit;</string>
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>40</width>
+                    <width>120</width>
                     <height>20</height>
                    </size>
                   </property>
@@ -248,16 +260,37 @@ font: inherit;</string>
                 <item>
                  <widget class="QPushButton" name="pshButton_check_mnemonic">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>400</width>
+                    <width>200</width>
                     <height>50</height>
                    </size>
+                  </property>
+                  <property name="sizeIncrement">
+                   <size>
+                    <width>200</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="baseSize">
+                   <size>
+                    <width>400</width>
+                    <height>100</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <italic>false</italic>
+                    <stylestrategy>PreferDefault</stylestrategy>
+                   </font>
+                  </property>
+                  <property name="tabletTracking">
+                   <bool>false</bool>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">background-color: #003dff;
@@ -265,6 +298,18 @@ color:white;</string>
                   </property>
                   <property name="text">
                    <string>Ok</string>
+                  </property>
+                  <property name="autoRepeat">
+                   <bool>false</bool>
+                  </property>
+                  <property name="autoDefault">
+                   <bool>false</bool>
+                  </property>
+                  <property name="default">
+                   <bool>false</bool>
+                  </property>
+                  <property name="flat">
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>

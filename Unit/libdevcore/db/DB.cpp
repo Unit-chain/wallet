@@ -32,8 +32,12 @@ std::optional<std::exception> unit::BasicDB::commit(std::shared_ptr<rocksdb::Wri
         while (status.code() != rocksdb::Status::Code::kOk) {
             status = rocksdb::DB::OpenForReadOnly(this->options, this->path, &db);
             if (status.code() != rocksdb::Status::Code::kOk) std::this_thread::sleep_for(std::chrono::seconds(3));
+
+	std::cout << "passed second test" << std::endl; // cant go further
             return {unit::error::DBIOError()};
         }
+
+	std::cout << "passed thirds test" << std::endl; // cant get here
         status = db->Write(this->writeOptions, batch.get());
         if (status.code() == rocksdb::Status::Code::kCorruption) return {unit::error::DBCorruption()};
         close(&db);

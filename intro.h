@@ -8,14 +8,17 @@
 #include <QShortcut>
 #include <QMessageBox>
 #include "qdebug.h"
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "no_mnemonic_page.h"
 
 #include "./Unit/libdevcore/bip44/BIP44.hpp"
 #include "./Unit/libdevcore/bip44/BIP39.hpp"
 #include "./Unit/libdevcore/bip44/BIP32.hpp"
-//#include "./Unit/libdevcore/db/DB.h"
-//#include "rocksdb/db.h"
+#include "./Unit/libdevcore/db/DB.h"
+#include "./Unit/libdevcore/datastructures/concurrency/DBWriter.h"
+#include "rocksdb/db.h"
 
 
 
@@ -33,6 +36,10 @@ public:
     ~intro();
     bool isValidMnemonic(std::string s);
     bool isValidPasphrase(std::string s);
+    void setUpDB(std::string);
+
+    const int cpuss = (int) std::thread::hardware_concurrency();
+
   private slots:
 
     void handleButton();
@@ -53,6 +60,9 @@ public:
 //    personalCabinet personal;
     QSettings settings;
     QShortcut *keyCtrlw ;
+    unit::BasicDB blockWriter;
+    std::string path_db;
+    const std::vector<std::string> columnFamiliesNames = {"Address", "balance"};
 
 };
 #endif // INTRO_H

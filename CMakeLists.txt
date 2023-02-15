@@ -29,7 +29,7 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Boost)
 find_package(OpenSSL REQUIRED)
 
-#set(ROCKSDB_SHARED_LIB /usr/local/lib/librocksdb.so)
+set(ROCKSDB_SHARED_LIB /usr/local/lib/librocksdb.so)
 
 add_executable(Unit
     main.cpp
@@ -57,14 +57,14 @@ add_executable(Unit
     ./Unit/libdevcore/bip44/SHA256.h
     ./Unit/libdevcore/bip44/utils.hpp
     ./Unit/libdevcore/bip44/utils.cpp
-#    ./Unit/libdevcore/db/DB.h
-#    ./Unit/libdevcore/db/DB.cpp
+    ./Unit/libdevcore/db/DB.h
+    ./Unit/libdevcore/db/DB.cpp
 
 
 
 )
 
-#target_link_libraries(${PROJECT_NAME} PRIVATE ${ROCKSDB_SHARED_LIB})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ROCKSDB_SHARED_LIB})
 target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::SSL)
 
 target_link_libraries(Unit PRIVATE Qt5::Widgets)
