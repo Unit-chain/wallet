@@ -2,7 +2,8 @@
 #define NO_MNEMONIC_PAGE_H
 
 #include <QDialog>
-
+#include <QClipboard>
+#include <QShortcut>
 
 
 #include <iostream>
@@ -27,9 +28,9 @@ public:
 
 
 private slots:
-  void on_pushButton_clicked();
+  void on_push_button_generate_mnemonic_clicked();
 
-  void on_pushButton_2_clicked();
+  void on_push_button_home_clicked();
 
 signals:
   void HomeClicked();
@@ -37,6 +38,8 @@ signals:
 private:
     Ui::no_mnemonic_page *ui;
     std::string createMnemonicPhrase();
+    QShortcut *keyEsc;
+    void copy_mnemonic();
 };
 
 #endif // NO_MNEMONIC_PAGE_H

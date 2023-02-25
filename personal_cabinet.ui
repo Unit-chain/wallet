@@ -16,10 +16,10 @@
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>40</y>
-     <width>461</width>
-     <height>321</height>
+     <x>120</x>
+     <y>100</y>
+     <width>260</width>
+     <height>92</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -29,55 +29,49 @@
     </sizepolicy>
    </property>
    <widget class="QWidget" name="page">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>70</x>
-       <y>70</y>
-       <width>90</width>
-       <height>37</height>
+       <x>6</x>
+       <y>6</y>
+       <width>248</width>
+       <height>80</height>
       </rect>
      </property>
-     <property name="styleSheet">
-      <string notr="true">background-color:white;
-</string>
-     </property>
-     <property name="text">
-      <string>Transfer</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="superMegaLineEdit">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>20</y>
-       <width>113</width>
-       <height>36</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color:white;</string>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="balanceLabel">
-     <property name="geometry">
-      <rect>
-       <x>11</x>
-       <y>30</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color:white;
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="balanceLabel">
+        <property name="styleSheet">
+         <string notr="true">color:white;
 background-color:black;</string>
-     </property>
-     <property name="text">
-      <string>Some balancee</string>
-     </property>
+        </property>
+        <property name="text">
+         <string>Some balancee</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="superMegaLineEdit">
+        <property name="styleSheet">
+         <string notr="true">background-color:white;</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="pushButton">
+        <property name="styleSheet">
+         <string notr="true">background-color:white;
+</string>
+        </property>
+        <property name="text">
+         <string>Transfer</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QWidget" name="page_2"/>

@@ -2,44 +2,41 @@
 #include "./ui_intro.h"
 
 intro::intro(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::intro)
-{
+        : QMainWindow(parent), ui(new Ui::intro) {
     ui->setupUi(this);
-    // NOT implemented feature
-    // AWARE: if true, you will have to exit the program in order to close running app
-//    if (FRAME_LESS_WINDOW) setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::ToolTip);
-    //
+
+
+    // Setting up App Name
+    QCoreApplication::setApplicationName("Unit");
+    QGuiApplication::setApplicationDisplayName(QCoreApplication::applicationName());
+    QCoreApplication::setOrganizationName("OOO Unit");
+    QCoreApplication::setApplicationVersion(QT_VERSION_STR);
+
+
 
     auto pathToStore = QString("Unit");
     auto rebornIni = QString("unitIni");
 
+    // Setting up Settings folder
     QSettings parameters(QSettings::IniFormat, QSettings::UserScope,
-                             pathToStore, rebornIni);
-
-        // Группа
-        const QString group = QString("Main parameters of Rocks DB");
-        const QString key = QString("Path to Rocks DB");
-        const QString value = QString("path");
-
-        // Запись группа - ключ - значение
-        parameters.beginGroup(group);
-        parameters.setValue(key, value);
-        parameters.endGroup();
-
-        // Сохранение записи
-        parameters.sync();
-
-        // вывод пути, по которому сохранен файл
-        qDebug() << parameters.fileName();
+                         pathToStore, rebornIni);
 
 
-        parameters.beginGroup(group);
-        QString fileValue = parameters.value(key).toString();
-        parameters.endGroup();
+    const QString group = QString("Main parameters of Rocks DB");
+    const QString key = QString("Path to Rocks DB");
+    const QString value = QString("path");
 
-        // Вывод значения в консоль
-        qDebug() << value << fileValue << (value == fileValue);
+    // Запись группа - ключ - значение
+    parameters.beginGroup(group);
+    parameters.setValue(key, value);
+    parameters.endGroup();
+
+    // Сохранение записи
+    parameters.sync();
+
+    parameters.beginGroup(group);
+    QString fileValue = parameters.value(key).toString();
+    parameters.endGroup();
 
     ui->setupUi(this);
 
@@ -47,29 +44,22 @@ intro::intro(QWidget *parent)
     std::string kDBPath = parameters.fileName().toStdString();
     kDBPath = kDBPath.substr(0, kDBPath.find_last_of("\\/"));
     kDBPath = kDBPath + "/db";
-    std::cout << "kDBPath = " << kDBPath << std::endl;
 
-      setUpDB(kDBPath);
-      blockWriter = unit::BasicDB(kDBPath);
-      std::shared_ptr<rocksdb::WriteBatch> txBatch = unit::BasicDB::getBatch();
-      std::shared_ptr<rocksdb::WriteBatch> blockBatchPtr = DBWriter::getBatch();
+    blockWriter = unit::BasicDB(kDBPath);
+    std::shared_ptr<rocksdb::WriteBatch> txBatch = unit::BasicDB::getBatch();
+    std::shared_ptr<rocksdb::WriteBatch> blockBatchPtr = DBWriter::getBatch();
 
-      std::string quest = "Address";
-      blockBatchPtr->Put(rocksdb::Slice(quest), rocksdb::Slice("baz"));
-      blockWriter.commit(blockBatchPtr);
+    std::string quest = "Address";
+    blockBatchPtr->Put(rocksdb::Slice(quest), rocksdb::Slice("baz"));
+    blockWriter.commit(blockBatchPtr);
 
-     std::cout << "waiting for response..." << std:: endl;
-     std::string resp = blockWriter.get(quest); // not working
-     std::cout << "resp = " << resp << std::endl;
+//    std::cout << "waiting for response..." << std::endl;
+    std::string resp = blockWriter.get(quest); // not working
+//    std::cout << "resp = " << resp << std::endl;
 
 
-
-
-   std::cout << "response = " << resp << std::endl;
-   this->blockWriter.commit(blockBatchPtr); //  использвоать
-
-
-
+//    std::cout << "response = " << resp << std::endl;
+    this->blockWriter.commit(blockBatchPtr); //  использвоать
 
     keyCtrlw = new QShortcut(this);
     keyCtrlw->setKey(Qt::CTRL + Qt::Key_W);
@@ -77,138 +67,157 @@ intro::intro(QWidget *parent)
     ui->stackedWidget->insertWidget(1, &mnemonic_page);
     ui->stackedWidget->insertWidget(2, &personal);
 
+
+    QPixmap logo(LOGO_PATH);
+    ui->icon_label->setPixmap(logo);
+    ui->icon_label->setScaledContents(true);
+    ui->icon_label->setFixedSize(100,30);
+
+
+    ui->line_edit_mnemonic->setPlaceholderText(QString("Insert Mnemonic Phrase"));
+    ui->line_edit_password->setPlaceholderText(QString("Insert Password Phrase"));
+    ui->pshButton_no_mnemonic->setText(QString("No Mnemonic?"));
+
+
+
+    ui->pshButton_no_mnemonic->setFixedWidth(150);
+//    pixmap.fill(Qt::transparent);
+
+//    QPainter painter(&pixmap);
+//    painter.setRenderHint(QPainter::Antialiasing, true);
+
+//    auto r = svgRenderer.defaultSize();
+//    QRect rect = painter.viewport();
+//    auto size = ui->icon_label->size();
+//    ui->icon_label->
+//    painter.setViewport(rect.x(), rect.y(),size.width(), size.height());
+//    QSize size = svgRenderer.size();
+
+//    svgRenderer.setViewBox();
+
+
+//    size(rect.size(), Qt::KeepAspectRatio);
+//    painter.setViewport(rect.x(), rect.y(),r.width(), r.height());
+//    painter.setWindow(svgRenderer.rect());
+//    painter.drawImage(0, 0, svgRenderer);
+//    svgRenderer.render(&painter);
+
+//    ui->icon_label->setPixmap(pixmap);
+//    auto a = ui->icon_label;
+
+//    ui->icon_label->
+
+//    QPixmap pic(LOGO_PATH);
+//    QSvgGenerator generator;
+//    generator.setFileName(LOGO_PATH);
+//    QPainter painter;
+//    painter.begin(&generator);
+//    ui->icon_label->paint(painter);
+//    painter.end();
+
+//      QPixmap pic(LOGO_PATH);
+//      pic.setDevicePixelRatio(this->devicePixelRatio());
+//    int img_size = 150;
+//    ui->icon_label->setPixmap(pic.scaled(img_size, img_size, Qt::KeepAspectRatio));
+
+
+//    QString newPath = QFileDialog::getSaveFileName(this, tr("Save SVG"),
+//            path, tr("SVG files (*.svg)"));
+
+//        if (newPath.isEmpty())
+//            return;
+
+//        path = newPath;
+            // Prepare a QImage with desired characteritisc
+//            QImage image(500, 200, QImage::Format_ARGB32);
+
+            // Get QPainter that paints to the image
+//            QPainter painter(&image);
+//            painter.begin(ui->icon_label);
+//            renderer.render(&painter);
+//        painter.end();
+
+    ui->pshButton_check_mnemonic->setStyleSheet(
+            "background-color: #003dff;"
+            "border: 1px solid #003dff;"
+            "border-radius: 5px;"
+            "color:white;"
+    );
+    ui->line_edit_mnemonic->setStyleSheet(
+            "background-color: #373737;"
+            "border: 1px solid #373737;"
+            "border-radius: 5px;"
+            "color: white;"
+            "padding-left: 5%;"
+            "font-size: 14px;"
+            "height: 25%;"
+    );
+
+    ui->line_edit_password->setStyleSheet(
+            "background-color: #373737;"
+            "border: 1px solid #373737;"
+            "border-radius: 5px;"
+            "color: white;"
+            "padding-left: 5%;"
+            "font-size: 14px;"
+    );
+    ui->pshButton_no_mnemonic->setStyleSheet(
+            "background-color: rgba(255,255,255,0);"
+            "color: #003dff;"
+            "font:inherit;"
+    );
+
+
     connect(ui->pshButton_check_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_check_mnemonic_clicked()));
     connect(ui->pshButton_no_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_no_mnemonic_clicked()));
     connect(&mnemonic_page, SIGNAL(HomeClicked()), this, SLOT(moveHome()));
     connect(keyCtrlw, SIGNAL(activated()), this, SLOT(slotShortcutCtrlw()));
 }
 
-intro::~intro()
-{
+intro::~intro() {
     delete ui;
 }
 
-bool intro::isValidMnemonic(std::string s)
-{
+bool intro::isValidMnemonic(std::string s) {
     return !s.empty();
 }
 
-bool intro::isValidPasphrase(std::string s)
-{
+bool intro::isValidPasphrase(std::string s) {
     return !s.empty();
 }
 
-void intro::setUpDB(std::string kDBPath)
-{
-    std::cout << "setUpDB\n" << std::endl;
-    struct stat info;
-    const char* pathName = kDBPath.c_str();
-    if (stat(pathName, &info) != 0) {
-        printf("cannot access %s\n", pathName);
-    } else if (info.st_mode & S_IFDIR ) {
-        printf("%s is a directory\n", pathName);
-        return;
-    } else {
-        printf("%s is not a directory", pathName);
-        return;
-    }
-    std::cout << "test" << std::endl;
-        rocksdb::Options options;
-        options.create_if_missing = false;
-        options.error_if_exists = false;
-        options.IncreaseParallelism(cpuss);
-        options.OptimizeLevelStyleCompaction();
-        options.bottommost_compression = rocksdb::kNoCompression;
-        options.compression = rocksdb::kLZ4Compression;
-        options.create_if_missing = true;
-        options.create_missing_column_families = true;
-        options.max_background_jobs = cpuss;
-        options.env->SetBackgroundThreads(cpuss);
-        options.num_levels = 2;
-        options.merge_operator = nullptr;
-        options.compaction_filter = nullptr;
-        options.compaction_filter_factory = nullptr;
-        options.rate_limiter = nullptr;
-        options.max_open_files = -1;
-        options.max_write_buffer_number = 6;
-        options.max_background_flushes = cpuss;
-        options.level0_stop_writes_trigger = -1;
-        options.level0_slowdown_writes_trigger = -1;
-        options.max_open_files = -1;
-
-        rocksdb::Options balance_options;
-        balance_options.create_if_missing = false;
-        balance_options.error_if_exists = false;
-        balance_options.IncreaseParallelism(cpuss);
-        balance_options.OptimizeLevelStyleCompaction();
-        balance_options.bottommost_compression = rocksdb::kNoCompression;
-        balance_options.compression = rocksdb::kNoCompression;
-        balance_options.create_if_missing = true;
-        balance_options.create_missing_column_families = true;
-        balance_options.max_background_jobs = cpuss;
-        balance_options.env->SetBackgroundThreads(cpuss);
-        balance_options.num_levels = 2;
-        balance_options.merge_operator = nullptr;
-        balance_options.compaction_filter = nullptr;
-        balance_options.compaction_filter_factory = nullptr;
-        balance_options.rate_limiter = nullptr;
-        balance_options.max_open_files = -1;
-        balance_options.max_write_buffer_number = 6;
-        balance_options.max_background_flushes = cpuss;
-        balance_options.level0_stop_writes_trigger = -1;
-        balance_options.level0_slowdown_writes_trigger = -1;
-        balance_options.max_open_files = 5000;
-        balance_options.create_if_missing = true;
-        balance_options.create_missing_column_families = true;
-
-        rocksdb::DB* db;
-        rocksdb::Status status = rocksdb::DB::Open(options, kDBPath, &db);
-        std::cout << "status of rocksdb = " << status.ok() << std::endl;
-        for (const auto & columnFamiliesName : columnFamiliesNames) { // creating column families
-                rocksdb::ColumnFamilyHandle* cf;
-                std::cout << "Creating column families: " << columnFamiliesName << std::endl;
-                status = db->CreateColumnFamily(rocksdb::ColumnFamilyOptions(), columnFamiliesName, &cf);
-                db->DestroyColumnFamilyHandle(cf); // delete ptr
-         }
-        delete db;
-}
-
-void intro::handleButton()
-{
+void intro::handleButton() {
     qDebug("I am alive");
 }
 
-void intro::moveHome()
-{
+void intro::moveHome() {
     ui->stackedWidget->setCurrentIndex(0);
 }
 
-void intro::on_pshButton_check_mnemonic_clicked()
-{
+void intro::on_pshButton_check_mnemonic_clicked() {
     qDebug("ok, check mnemonic");
-   std::string mnemonic = ui->line_edit_mnemonic->text().toStdString();
-    std::string passphrase = ui->Line_edit_password->text().toStdString();
+
+    std::string mnemonic = ui->line_edit_mnemonic->text().toStdString();
+    std::string passphrase = ui->line_edit_password->text().toStdString();
+
     if (!isValidMnemonic(mnemonic) || !isValidPasphrase(passphrase)) {
         qDebug("you have to type in");
     } else {
-    BIP39Result bip39Result = BIP39Result(mnemonic, passphrase);
-    BIP44 bip44 = BIP44();
-    BIP44Result bip44Result = bip44.generateAddress(bip39Result, 0, EXTERNAL_CHANGE, 0);
-    std::cout << "address = (" << bip44Result.address << ")" << std::endl;
+        BIP39Result bip39Result = BIP39Result(mnemonic, passphrase);
+        BIP44 bip44 = BIP44();
+        BIP44Result bip44Result = bip44.generateAddress(bip39Result, 0, EXTERNAL_CHANGE, 0);
+        std::cout << "address = (" << bip44Result.address << ")" << std::endl;
 
-    ui->stackedWidget->setCurrentIndex(2);
+        ui->stackedWidget->setCurrentIndex(2);
     }
 }
 
-void intro::on_pshButton_no_mnemonic_clicked()
-{
+void intro::on_pshButton_no_mnemonic_clicked() {
     qDebug("no mnemonic, create it");
 
     ui->stackedWidget->setCurrentIndex(1);
 }
 
-void intro::slotShortcutCtrlw()
-{
-     this->close();
+void intro::slotShortcutCtrlw() {
+    this->close();
 }
-
