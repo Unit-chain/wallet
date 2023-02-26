@@ -68,11 +68,22 @@ intro::intro(QWidget *parent)
     ui->stackedWidget->insertWidget(2, &personal);
 
 
-    QPixmap logo(LOGO_PATH);
-    ui->icon_label->setPixmap(logo);
-    ui->icon_label->setScaledContents(true);
-    ui->icon_label->setFixedSize(100,30);
+//    QPixmap logo(LOGO_PATH);
+//    ui->icon_label->setPixmap(logo);
+//    ui->icon_label->setScaledContents(true);
+//    ui->icon_label->setFixedSize(100,30);
 
+//    QSvgWidget("/home/yourgod/Programming/qt/unit/Unit/icon/logo-07-cropped.svg", ui->icon_label);
+    auto _parentWidget = ui->icon_widget;
+    QSvgWidget *svgWidget = new QSvgWidget(_parentWidget);
+    svgWidget->load(QString(LOGO_PATH));
+
+    svgWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    svgWidget->setFixedSize(QSize(150,60));
+
+    QVBoxLayout *layout = new QVBoxLayout(_parentWidget);
+    layout->addWidget(svgWidget);
+    _parentWidget->setLayout(layout);
 
     ui->line_edit_mnemonic->setPlaceholderText(QString("Insert Mnemonic Phrase"));
     ui->line_edit_password->setPlaceholderText(QString("Insert Password Phrase"));
@@ -171,6 +182,7 @@ intro::intro(QWidget *parent)
     connect(ui->pshButton_check_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_check_mnemonic_clicked()));
     connect(ui->pshButton_no_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_no_mnemonic_clicked()));
     connect(&mnemonic_page, SIGNAL(HomeClicked()), this, SLOT(moveHome()));
+    connect(&personal, SIGNAL(HomeClicked()), this, SLOT(moveHome()));
     connect(keyCtrlw, SIGNAL(activated()), this, SLOT(slotShortcutCtrlw()));
 }
 
@@ -191,6 +203,8 @@ void intro::handleButton() {
 }
 
 void intro::moveHome() {
+    ui->line_edit_mnemonic->clear();
+    ui->line_edit_password->clear();
     ui->stackedWidget->setCurrentIndex(0);
 }
 

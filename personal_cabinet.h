@@ -22,16 +22,21 @@ class personal_cabinet : public QDialog
 public:
     explicit personal_cabinet(QWidget *parent = nullptr);
     ~personal_cabinet();
-     std::string m_balance;
 
+
+    std::string m_balance;
     std::string getBalance() { return m_balance; }
-
-signals:
-    void balanceChanged(std::string newBalance);
 
 private:
     Ui::personal_cabinet *ui;
     void updateBalanceLabel();
+
+private slots:
+    void pshBtn_home_clicked();
+
+signals:
+    void HomeClicked();
+    void balanceChanged(std::string newBalance);
 
 protected:
     void setBalance(std::string *balance);

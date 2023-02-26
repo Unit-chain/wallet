@@ -14,6 +14,7 @@
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QRect>
+#include <QSvgWidget>
 
 #include "no_mnemonic_page.h"
 #include "personal_cabinet.h"
