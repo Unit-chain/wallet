@@ -22,14 +22,36 @@ personal_cabinet::personal_cabinet(QWidget *parent) :
 
     ui->pshBtn_main_menu->setText(QString("Go back"));
     ui->pshBtn_main_menu->setStyleSheet(
-                "color: white;"
-                "border: 1px solid black;"
+            "background-color: #373737;"
+            "border: 1px solid #373737;"
+            "border-radius: 5px;"
+            "color: white;"
+            "font-size: 14px;"
+            "height: 25%;"
                 );
     ui->label_balance->setStyleSheet(
                 "color: white;");
     ui->label_send_to->setStyleSheet(
                 "color: white;");
     ui->line_send_to->setPlaceholderText(QString("Search, public address (0x)"));
+//    ui->line_send_to->setTabOrder(ui->line_send_to, ui->pshBtn_send);
+
+    ui->line_send_to->setStyleSheet(
+            "background-color: #373737;"
+            "border: 1px solid #373737;"
+            "border-radius: 5px;"
+            "color: white;"
+            "font-size: 14px;"
+            "height: 25%;"
+   );
+    ui->pshBtn_send->setStyleSheet(
+            "background-color: #373737;"
+            "border: 1px solid #373737;"
+            "border-radius: 5px;"
+            "color: white;"
+            "font-size: 14px;"
+            "height: 25%;"
+    );
 
     QObject::connect(timer, &QTimer::timeout,this,&personal_cabinet::updateBalanceLabel);
     connect(ui->pshBtn_main_menu, SIGNAL(clicked()), this, SLOT(pshBtn_home_clicked()));

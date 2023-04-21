@@ -3,6 +3,7 @@
 std::string unit::BasicDB::getWithIO(std::string &key) {
         rocksdb::DB *db;
         rocksdb::Status status = rocksdb::DB::OpenForReadOnly(this->options, this->path, &db);
+
         if (status.code() == rocksdb::Status::Code::kCorruption) throw unit::error::DBCorruption();
         if (status.code() == rocksdb::Status::Code::kIOError) throw unit::error::DBIOError();
         while (status.code() != rocksdb::Status::Code::kOk) {
@@ -13,6 +14,7 @@ std::string unit::BasicDB::getWithIO(std::string &key) {
         status = db->Get(rocksdb::ReadOptions(), rocksdb::Slice(key), &response);
         if (!status.ok()) {
             if (status.code() == rocksdb::Status::Code::kNotFound) {
+
                 DB::close(&db);
                 throw unit::error::DBNotFound();
             }
@@ -26,7 +28,6 @@ std::string unit::BasicDB::getWithIO(std::string &key) {
 std::optional<std::exception> unit::BasicDB::commit(std::shared_ptr<rocksdb::WriteBatch> &batch) {
         rocksdb::DB *db;
         rocksdb::Status status = rocksdb::DB::Open(this->options, this->path, &db);
-	std::cout << "path:" << this->path << ",status: " << status.ToString() << std::endl;
         if (status.code() == rocksdb::Status::Code::kCorruption) return {unit::error::DBCorruption()};
         if (status.code() == rocksdb::Status::Code::kIOError) return {unit::error::DBIOError()};
         while (status.code() != rocksdb::Status::Code::kOk) {
@@ -118,7 +119,6 @@ std::string unit::BasicDB::get(std::string &key) {
     while (status.code() != rocksdb::Status::Code::kOk) {
         status = rocksdb::DB::OpenForReadOnly(this->options, this->path, &db);
         if (status.code() != rocksdb::Status::Code::kOk) {
-            std::cout << "rocksdb status is NOT OK, sleep while it become OK" << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(3));
         }
     }

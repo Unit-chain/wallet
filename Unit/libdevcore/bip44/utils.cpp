@@ -20,6 +20,7 @@ inline uint8_t hex2dec(std::string hex)
     }
     return result;
 }
+
 inline std::string to_hex(const std::string input)
 {
     static const char *lut = "0123456789abcdef0123456789ABCDEF";

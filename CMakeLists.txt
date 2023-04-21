@@ -16,10 +16,19 @@ find_package(Qt5 COMPONENTS
         REQUIRED)
 
 find_package(OpenSSL REQUIRED)
+
 #find_package(RocksDB REQUIRED)
 set(ROCKSDB_SHARED_LIB /usr/local/lib/librocksdb.so)
 
+# Set the path to the Crypto++ library
+set(CRYPTOPP /usr/local/lib/libcryptopp.a)
 
+
+# Locate the Crypto++ library
+find_library(CRYPTOPP NAMES cryptopp PATHS ${CRYPTOPP})
+
+# Include the Crypto++ headers
+include_directories(${CRYPTOPP})
 
 
 
@@ -48,6 +57,11 @@ add_executable(${PROJECT_NAME}
         Unit/libdevcore/bip44/utils.cpp
         Unit/libdevcore/db/DB.h
         Unit/libdevcore/db/DB.cpp
+        aes_256_GCM.cpp
+        aes_256_GCM.h
+        cpuid.cpp
+        cpuid.h
+
         ${LOGO}
         )
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -61,3 +75,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::SSL)
 #target_link_libraries(${PROJECT_NAME} PRIVATE RocksDB::rocksdb)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${ROCKSDB_SHARED_LIB})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
+# Link the executable with the Crypto++ library
+target_link_libraries(${PROJECT_NAME} PRIVATE ${CRYPTOPP})

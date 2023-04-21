@@ -37,9 +37,11 @@ signals:
 
 private:
     Ui::no_mnemonic_page *ui;
-    std::string createMnemonicPhrase();
+    void createMnemonicPhrase();
     QShortcut *keyEsc;
     void copy_mnemonic();
+    void setUpUI();
+    void setUpHotKeys();
 };
 
 #endif // NO_MNEMONIC_PAGE_H

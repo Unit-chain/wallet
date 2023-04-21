@@ -13,27 +13,48 @@ no_mnemonic_page::no_mnemonic_page(QWidget *parent) :
     ui(new Ui::no_mnemonic_page)
 {
     ui->setupUi(this);
-    keyEsc = new QShortcut(this);
-    keyEsc->setKey(Qt::Key_Escape);
 
-    ui->pshBtnMainMenu->setText(QString("Main Menu"));
-    ui->pshBtnGenerateMnemonic->setText("Mnemonic Phrase");
+    setUpHotKeys();
+    setUpUI();
+
+    connect(ui->pshBtnGenerateMnemonic, SIGNAL(clicked(bool)),this,SLOT(on_push_button_generate_mnemonic_clicked()));
+    connect(ui->pshBtnMainMenu, SIGNAL(clicked(bool)),this,SLOT(on_push_button_home_clicked()));
+}
+
+
+
+void no_mnemonic_page::copy_mnemonic() {
+    qDebug("copy");
+    ui->mnemonic_text->selectAll();
+    ui->mnemonic_text->copy();
+}
+
+void no_mnemonic_page::setUpHotKeys() {
+     keyEsc = new QShortcut(this);
+    keyEsc->setKey(Qt::Key_Escape);
+    connect(keyEsc, SIGNAL(activated()), this, NULL);
+}
+
+void no_mnemonic_page::setUpUI() {
+
+    ui->pshBtnMainMenu->setText(QString("Main menu"));
+    ui->pshBtnGenerateMnemonic->setText("Generate phrase");
     ui->mnemonic_text->setReadOnly(true);
     ui->mnemonic_text->copyAvailable(true);
     ui->mnemonic_text->setFixedSize(QSize(600,300));
     ui->mnemonic_text->setStyleSheet(
-            "background-color: #0D388F;"
-            "border: 1px solid #0D388F;"
-            "border-radius: 2px;"
+            "background-color: #373737;"
+            "border: 1px solid #373737;"
+            "border-radius: 5px;"
             "color:white;"
     );
+    ui->mnemonic_text->setPlaceholderText(QString("Your mnemonic phrase will be here"));
     ui->pshBtnGenerateMnemonic->setStyleSheet(
             "background-color: #003dff;"
             "border: 1px solid #003dff;"
             "border-radius: 5px;"
             "color:white;"
     );
-
     ui->pshBtnMainMenu->setStyleSheet(
             "background-color: #003dff;"
             "border: 1px solid #003dff;"
@@ -43,17 +64,7 @@ no_mnemonic_page::no_mnemonic_page(QWidget *parent) :
     ui->pshBtnGenerateMnemonic->setFixedSize(150,30);
     ui->pshBtnMainMenu->setFixedSize(150,30);
 
-// TODO:create window that says "Copied to Clipboard"
 
-    connect(ui->pshBtnGenerateMnemonic, SIGNAL(clicked(bool)),this,SLOT(on_push_button_generate_mnemonic_clicked()));
-    connect(ui->pshBtnMainMenu, SIGNAL(clicked(bool)),this,SLOT(on_push_button_home_clicked()));
-    connect(keyEsc, SIGNAL(activated()), this, NULL);
-}
-
-void no_mnemonic_page::copy_mnemonic() {
-    qDebug("copy");
-    ui->mnemonic_text->selectAll();
-    ui->mnemonic_text->copy();
 }
 
 no_mnemonic_page::~no_mnemonic_page()
@@ -62,6 +73,19 @@ no_mnemonic_page::~no_mnemonic_page()
 }
 
 void no_mnemonic_page::on_push_button_generate_mnemonic_clicked()
+{
+    createMnemonicPhrase();
+    copy_mnemonic();
+}
+
+void no_mnemonic_page::on_push_button_home_clicked()
+{
+    emit HomeClicked();
+    ui->mnemonic_text->clear();
+
+}
+
+void no_mnemonic_page::createMnemonicPhrase()
 {
 
     BIP44 bip44;
@@ -98,19 +122,5 @@ void no_mnemonic_page::on_push_button_generate_mnemonic_clicked()
 
     ui->mnemonic_text->setText(QString::fromStdString(r.mnemonic.phrase));
     std::cout << "No_mnemonic_page::on_pushButton_clicked" << std::endl;
-    copy_mnemonic();
-}
-
-void no_mnemonic_page::on_push_button_home_clicked()
-{
-    emit HomeClicked();
-    ui->mnemonic_text->clear();
-
-}
-
-std::string no_mnemonic_page::createMnemonicPhrase()
-{
-    qDebug("createMnemonicPhrase");
-    return std::string("createMnemonicPhrase");
 
 }
