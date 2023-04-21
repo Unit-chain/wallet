@@ -115,7 +115,7 @@ intro::intro(QWidget *parent)
     );
 
 
-    connect(ui->pshButton_check_mnemonic, SIGNAL(clicked()), this, SLOT(on_pshButton_check_mnemonic_clicked()));
+    connect(ui->pshButton_check_mnemonic, SIGNAL(clicked()), this, SLOT(on_pshButton_check_mnemonic_clicked_()));
     connect(ui->pshButton_no_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_no_mnemonic_clicked_()));
     connect(&mnemonic_page, SIGNAL(HomeClicked()), this, SLOT(moveHome()));
     connect(&personal, SIGNAL(HomeClicked()), this, SLOT(moveHome()));
@@ -246,7 +246,7 @@ void intro::moveHome() {
     ui->stackedWidget->setCurrentIndex(0);
 }
 
-void intro::on_pshButton_check_mnemonic_clicked() {
+void intro::on_pshButton_check_mnemonic_clicked_() {
     bool flagToShowNextPage = false;
 
     cout << "check clicked\n";
@@ -301,7 +301,7 @@ void intro::on_pshButton_check_mnemonic_clicked() {
     // TODO: show that either pass or mnemonic is wrong
 
    // If user pass and mnemonic exist already -> check them with input pass and mnemonic
-    if (resp_pass == sha384(password) && aes_256_GCM::decode(resp_mnemonic, aad, stringToByte(password_key), password_key_length, iv, sizeof(iv)) == mnemonic) {
+    if (resp_pass == sha384(password_key) && aes_256_GCM::decode(resp_mnemonic, aad, stringToByte(password_key), password_key_length, iv, sizeof(iv)) == mnemonic) {
         cout << "resp == pass\n";
         flagToShowNextPage = true;
     } else if (!isValidMnemonic(mnemonic) || !isValidPasphrase(password)) {

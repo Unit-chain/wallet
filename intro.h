@@ -63,7 +63,7 @@ public:
 
     void moveHome();
 
-    void on_pshButton_check_mnemonic_clicked();
+    void on_pshButton_check_mnemonic_clicked_();
 
     void on_pshButton_no_mnemonic_clicked_();
 

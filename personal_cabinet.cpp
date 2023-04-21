@@ -7,8 +7,10 @@ personal_cabinet::personal_cabinet(QWidget *parent) :
 {
     ui->setupUi(this);
     QTimer *timer = new QTimer(this);
+// ui
 
-
+    {
+        ui->line_send_to->setText(QString(""));
     ui->label_current_balance->setStyleSheet(
             "background-color: #373737;"
             "border: 1px solid #373737;"
@@ -52,6 +54,8 @@ personal_cabinet::personal_cabinet(QWidget *parent) :
             "font-size: 14px;"
             "height: 25%;"
     );
+
+    }
 
     QObject::connect(timer, &QTimer::timeout,this,&personal_cabinet::updateBalanceLabel);
     connect(ui->pshBtn_main_menu, SIGNAL(clicked()), this, SLOT(pshBtn_home_clicked()));
