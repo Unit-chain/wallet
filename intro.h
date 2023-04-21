@@ -65,13 +65,12 @@ public:
 
     void on_pshButton_check_mnemonic_clicked();
 
-    void on_pshButton_no_mnemonic_clicked();
+    void on_pshButton_no_mnemonic_clicked_();
 
     void slotShortcutCtrlw();
 
   private:
     Ui::intro *ui;
-//    QPushButton *m_button;
     QStackedWidget *stk;
     no_mnemonic_page mnemonic_page;
     personal_cabinet personal;
@@ -90,6 +89,7 @@ public:
 
 
     CryptoPP::byte iv[12];
+    int clickCounter = 0;
 
     void setUpUI();
     void setUpHotKeys();
@@ -101,7 +101,6 @@ std::string sha384(const string& input_string);
 
 CryptoPP::byte* stringToByte(const std::string& input);
 
-
-std::string byte_to_string(const CryptoPP::byte* bytes, size_t size);
+std::string byteToString(const CryptoPP::byte* bytes, size_t size);
 
 #endif // INTRO_H

@@ -81,6 +81,8 @@ intro::intro(QWidget *parent)
 
 
 
+    ui->stackedWidget->setStyleSheet(
+                "background-color: #171717 !important;");
     ui->pshButton_no_mnemonic->setFixedWidth(150);
     ui->pshButton_check_mnemonic->setStyleSheet(
             "background-color: #003dff;"
@@ -112,12 +114,12 @@ intro::intro(QWidget *parent)
             "font:inherit;"
     );
 
-//    setUpUI();
 
-    connect(ui->pshButton_check_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_check_mnemonic_clicked()));
-    connect(ui->pshButton_no_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_no_mnemonic_clicked()));
+    connect(ui->pshButton_check_mnemonic, SIGNAL(clicked()), this, SLOT(on_pshButton_check_mnemonic_clicked()));
+    connect(ui->pshButton_no_mnemonic, SIGNAL(clicked(bool)), this, SLOT(on_pshButton_no_mnemonic_clicked_()));
     connect(&mnemonic_page, SIGNAL(HomeClicked()), this, SLOT(moveHome()));
     connect(&personal, SIGNAL(HomeClicked()), this, SLOT(moveHome()));
+
     connect(keyCtrlw, SIGNAL(activated()), this, SLOT(slotShortcutCtrlw()));
 }
 
@@ -247,6 +249,7 @@ void intro::moveHome() {
 void intro::on_pshButton_check_mnemonic_clicked() {
     bool flagToShowNextPage = false;
 
+    cout << "check clicked\n";
     // Get mnemonic and password from user
     std::string mnemonic = ui->line_edit_mnemonic->text().toStdString();
     std::string password = ui->line_edit_password->text().toStdString();
@@ -280,103 +283,79 @@ void intro::on_pshButton_check_mnemonic_clicked() {
     string resp_pass;
     string resp_mnemonic;
     string resp_iv;
+
     // Get user pass and mnemonic if they exist
     try {
-            printf("Trying to get pass and mnemonic\n");
             resp_pass = blockWriter.getWithIO(password_hash_3_256_name_in_DB);
             resp_mnemonic = blockWriter.getWithIO(mnemonic_cipher_name_in_DB);
             resp_iv = blockWriter.getWithIO(iv_name_in_DB);
     } catch(unit::error::DBCorruption *e) {
-        cout << "error " << e << '\n';
+        cout << "error with DB corruption: " << e << '\n';
     } catch (unit::error::DBIOError *e){
-        cout << "error " << e << '\n';
+        cout << "error wirh IO in DB: " << e << '\n';
     } catch(...) {
-        printf(" /// Exception with gettin pass and mnemonic\n \
-        /// It could either not exist, or DB did not start well\n \
-        /// Creating new DB with specified pass and mnemonic\n");
+        printf(" ///Exception with gettin pass and mnemonic\n\
+/// It could either not exist, or DB did not start well\n\
+/// Creating new DB with specified pass and mnemonic\n");
     }
-
-
-
-   // if user pass and mnemonic exist already -> check them with input pass and mnemonic
-    printf("\n\nCheck input data\n\n");
-//    printf("resp_pass = %s\n", resp_pass.c_str());
-//    printf("resp_mnemonic = %s\n", resp_mnemonic.c_str());
     // TODO: show that either pass or mnemonic is wrong
 
-
+   // If user pass and mnemonic exist already -> check them with input pass and mnemonic
     if (resp_pass == sha384(password) && aes_256_GCM::decode(resp_mnemonic, aad, stringToByte(password_key), password_key_length, iv, sizeof(iv)) == mnemonic) {
-        printf("resp == input\n");
-     flagToShowNextPage = true;
-
-
+        cout << "resp == pass\n";
+        flagToShowNextPage = true;
     } else if (!isValidMnemonic(mnemonic) || !isValidPasphrase(password)) {
     // If user pass and mnemonic does not exist -> create them
     // Check if mnemonic and password are of required length and strongivity
 
-        qDebug("you have to type in");
+        cout << "not valid\n";
+        qDebug("you have to type in eiher password or mnemonic");
         // TODO: show required input data properties
 
     } else if (resp_pass == "" && resp_pass == ""){
-        // Generate wallet from mnemonic and password
 
-        cout << "flagtoshownextpage\n";
+        cout << "resp and pass are empty\n";
+        // Generate wallet from mnemonic and password
         BIP39Result bip39Result = BIP39Result(mnemonic, password);
         BIP44 bip44 = BIP44();
         BIP44Result bip44Result = bip44.generateAddress(bip39Result, 0, EXTERNAL_CHANGE, 0);
 
-            // stone security primary moment celery escape lobster penalty enjoy lyrics save grass drama together youth enact cotton drink mammal lawsuit agent brass ecology raccoon
-            // 01234567890123456789012345678901
+        // stone security primary moment celery escape lobster penalty enjoy lyrics save grass drama together youth enact cotton drink mammal lawsuit agent brass ecology raccoon
+        // 01234567890123456789012345678901
 
-
-
-
-
-//         Encoding
-//         Я могу использовать пароль в качестве key,
-//         вендора cpu в качестве aad, iv генерить рандомно и хранить публично в json-е пользователя
-
-
+        // Encoding mnemonic and password with aes-256 and sha384 respectively
          auto mnemonic_cipher = aes_256_GCM::encode(aad, mnemonic, stringToByte(password_key), password_key_length, iv, sizeof(iv));
-
          auto password_hash_3_256 = sha384(password_key);
 
-
-
-
-
+         // Preparing mnemonic, password, iv to be put to db
          blockBatchPtr->Put(rocksdb::Slice(mnemonic_cipher_name_in_DB), rocksdb::Slice(mnemonic_cipher));
          blockBatchPtr->Put(rocksdb::Slice(password_hash_3_256_name_in_DB), rocksdb::Slice(password_hash_3_256));
-         blockBatchPtr->Put(rocksdb::Slice(iv_name_in_DB), rocksdb::Slice(byte_to_string(iv, sizeof(iv))));
+         blockBatchPtr->Put(rocksdb::Slice(iv_name_in_DB), rocksdb::Slice(byteToString(iv, sizeof(iv))));
 
+         // Commiting data to db
          blockWriter.commit(blockBatchPtr);
 
         // Let user to go to next page
          flagToShowNextPage = true;
-
-         // Test to login to app {
-            std::string resp = blockWriter.get(mnemonic_cipher_name_in_DB);
-            cout << "response = " << aes_256_GCM::decode(resp, aad, stringToByte(password_key), password_key_length, iv, sizeof(iv)) << std::endl;
-            assert(aes_256_GCM::decode(resp, aad, stringToByte(password_key), password_key_length, iv, sizeof(iv)) == mnemonic);
-
-
-            resp = blockWriter.get(password_hash_3_256_name_in_DB);
-            assert(resp == sha384(password_key));
-         // Test }
         }
 
     // Show user next page
     if (flagToShowNextPage) {
-        ui->stackedWidget->setCurrentIndex(2);
+            ui->stackedWidget->setCurrentIndex(2);
     }
 }
 
-// When user has no mnemonic, that button will be pushed
-void intro::on_pshButton_no_mnemonic_clicked() {
-    qDebug("no mnemonic, create it");
-
+void intro::on_pshButton_no_mnemonic_clicked_() {
+    clickCounter++;
+    qDebug() << "no mnemonic, create i, click count: " << clickCounter;
     ui->stackedWidget->setCurrentIndex(1);
 }
+// When user has no mnemonic, that button will be pushed
+//void intro::on_pshButton_no_mnemonic_clicked() {
+//    qDebug("no mnemonic, create it");
+
+//    ui->stackedWidget->setCurrentIndex(1);
+//}
 
 // Close app with `ctrl + w` combination
 void intro::slotShortcutCtrlw() {
@@ -410,7 +389,7 @@ CryptoPP::byte* stringToByte(const std::string& input_loc) {
     return output.data();
 }
 
-std::string byte_to_string(const CryptoPP::byte* bytes, size_t size) {
+std::string byteToString(const CryptoPP::byte* bytes, size_t size) {
     std::ostringstream ss;
     ss << std::hex << std::setfill('0');
     for (size_t i = 0; i < size; i++) {
@@ -421,7 +400,6 @@ std::string byte_to_string(const CryptoPP::byte* bytes, size_t size) {
 
 std::string intro::get_N_width_string(std::string input_string, size_t string_size, int desired_width)
 {
-    cout << "input string length in the start is " << input_string.length() << "\n";
     // If input string is already at desired width, return it
     if (input_string.size() == desired_width)
         return input_string;
@@ -432,13 +410,7 @@ std::string intro::get_N_width_string(std::string input_string, size_t string_si
         std::string output_string; // Create output string
 
         // Calculate output size
-
-        if (input_string.size() == 0) {
-            cout << "input string size == 0\n";
-            cout << "input string is " << input_string << "\n";
-        }
         float output_size_f = desired_width / input_string.size();
-        cout << "output_size_f = " << output_size_f << "\n";
         int output_size_i = std::round(output_size_f);
 
         output_string.reserve(input_string.size()*output_size_i);

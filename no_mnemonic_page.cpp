@@ -24,7 +24,6 @@ no_mnemonic_page::no_mnemonic_page(QWidget *parent) :
 
 
 void no_mnemonic_page::copy_mnemonic() {
-    qDebug("copy");
     ui->mnemonic_text->selectAll();
     ui->mnemonic_text->copy();
 }
@@ -121,6 +120,5 @@ void no_mnemonic_page::createMnemonicPhrase()
     std::cout << "Result of verification: "<<verified2<<"\n";
 
     ui->mnemonic_text->setText(QString::fromStdString(r.mnemonic.phrase));
-    std::cout << "No_mnemonic_page::on_pushButton_clicked" << std::endl;
 
 }

@@ -21,7 +21,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">border: 0 solid;
-background-color: #171717;</string>
+</string>
   </property>
   <property name="tabShape">
    <enum>QTabWidget::Rounded</enum>
@@ -43,9 +43,7 @@ background-color: #171717;</string>
        </sizepolicy>
       </property>
       <property name="styleSheet">
-       <string notr="true">
-background-color: white ;
-background-color: #171717 !important;</string>
+       <string notr="true"/>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -543,7 +541,7 @@ background-color: #171717 !important;</string>
                      <string notr="true"/>
                     </property>
                     <property name="text">
-                     <string>No mnemonic? Press me :)</string>
+                     <string>No mnemonic</string>
                     </property>
                    </widget>
                   </item>
