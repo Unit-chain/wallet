@@ -253,7 +253,16 @@ void intro::on_pshButton_check_mnemonic_clicked_() {
     // Get mnemonic and password from user
     std::string mnemonic = ui->line_edit_mnemonic->text().toStdString();
     std::string password = ui->line_edit_password->text().toStdString();
+    if (!isValidMnemonic(mnemonic) || !isValidPasphrase(password)) {
+    // If user pass and mnemonic does not exist -> create them
+    // Check if mnemonic and password are of required length and strongivity
 
+        cout << "not valid\n";
+        qDebug("you have to type in eiher password or mnemonic");
+        // TODO: show required input data properties
+
+        return;
+        }
 
         string _password_key = password;
 
@@ -304,15 +313,7 @@ void intro::on_pshButton_check_mnemonic_clicked_() {
     if (resp_pass == sha384(password_key) && aes_256_GCM::decode(resp_mnemonic, aad, stringToByte(password_key), password_key_length, iv, sizeof(iv)) == mnemonic) {
         cout << "resp == pass\n";
         flagToShowNextPage = true;
-    } else if (!isValidMnemonic(mnemonic) || !isValidPasphrase(password)) {
-    // If user pass and mnemonic does not exist -> create them
-    // Check if mnemonic and password are of required length and strongivity
-
-        cout << "not valid\n";
-        qDebug("you have to type in eiher password or mnemonic");
-        // TODO: show required input data properties
-
-    } else if (resp_pass == "" && resp_pass == ""){
+        } else if (resp_pass == "" && resp_pass == ""){
 
         cout << "resp and pass are empty\n";
         // Generate wallet from mnemonic and password
