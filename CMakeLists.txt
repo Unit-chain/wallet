@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(UnitWallet)
+project(UnitWallet VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
@@ -8,14 +8,16 @@ set(CMAKE_AUTOUIC ON)
 
 add_compile_definitions(LOGO_PATH="${CMAKE_CURRENT_SOURCE_DIR}/icon/logo-07-cropped.svg")
 
-find_package(Qt5 COMPONENTS
+find_package(Qt5 COMPONENTS REQUIRED
         Core
         Gui
         Widgets
         Svg
-        REQUIRED)
+        WebEngineWidgets
+        )
 
 find_package(OpenSSL REQUIRED)
+
 
 #find_package(RocksDB REQUIRED)
 set(ROCKSDB_SHARED_LIB /usr/local/lib/librocksdb.so)
@@ -61,6 +63,8 @@ add_executable(${PROJECT_NAME}
         aes_256_GCM.h
         cpuid.cpp
         cpuid.h
+        sidebar.cpp
+        sidebar.h
 
         ${LOGO}
         )
@@ -77,3 +81,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${ROCKSDB_SHARED_LIB})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 # Link the executable with the Crypto++ library
 target_link_libraries(${PROJECT_NAME} PRIVATE ${CRYPTOPP})
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::WebEngineWidgets)
+
+
+install(TARGETS ${PROJECT_NAME}
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

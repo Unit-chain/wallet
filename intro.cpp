@@ -12,11 +12,14 @@ intro::intro(QWidget *parent)
     ui->setupUi(this);
 
 
+
     // Setting up App Name QCoreApplication::setApplicationName("Unit");
     QGuiApplication::setApplicationDisplayName(QCoreApplication::applicationName());
     QCoreApplication::setOrganizationName("OOO Unit");
     QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
+    //QApplication app();
+    //app.setWindowIcon(QIcon(QStringLiteral(LOGO_PATH)));
 
 
 // key - Mnemonic; value - AES256 <mnemonic phrase>

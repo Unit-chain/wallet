@@ -10,7 +10,6 @@
 #include <string>
 #include <QTime>
 
-
 namespace Ui {
 class personal_cabinet;
 }
