@@ -9,6 +9,11 @@
 #include "qdebug.h"
 #include <string>
 #include <QTime>
+#include <QWebEngineView>
+#include <QtWebEngineWidgets/QWebEngineView>
+#include <QtWebEngineWidgets/QWebEngineProfile>
+#include <QtWebEngineWidgets/QWebEngineSettings>
+#include <QFileDialog>
 
 namespace Ui {
 class personal_cabinet;

@@ -12,7 +12,7 @@ personal_cabinet::personal_cabinet(QWidget *parent) :
     QTimer *timer = new QTimer(this);
 // ui
 
-    {
+
         QString font_size_style = "font-size:14px;";
         QString color_text_white_style = "color:white;";
         QString color_text_white_minus1_style = "color:#78787A;";
@@ -98,10 +98,46 @@ personal_cabinet::personal_cabinet(QWidget *parent) :
             "height: 25%;"
     );
 
-    }
+
 
     QObject::connect(timer, &QTimer::timeout,this,&personal_cabinet::updateBalanceLabel);
     connect(ui->pshBtn_main_menu, SIGNAL(clicked()), this, SLOT(pshBtn_home_clicked()));
+
+    QPushButton *button = new QPushButton("Добавить сайт");
+    button->setStyleSheet(ui_debug_style);
+
+    QWidget *buttonContainer = new QWidget();
+    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonContainer);
+    buttonLayout->addWidget(button);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
+    buttonContainer->setLayout(buttonLayout);
+
+
+
+    // web engine
+    QWebEngineView *webView = new QWebEngineView();
+
+    webView->load(QUrl("https://in-space.ru/skyonline/"));
+
+    QVBoxLayout *layout = new QVBoxLayout(ui->web_page);
+    layout->addWidget(buttonContainer);  // Add the container widget, not the button
+    layout->addWidget(webView);
+    layout->setStretchFactor(webView, 1);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+
+
+    QObject::connect(button, &QPushButton::clicked, [webView]() {
+        QString fileName = QFileDialog::getOpenFileName(nullptr, "Выберите HTML-файл", QString(), "HTML-файлы (*.html)");
+        if (!fileName.isEmpty()) {
+            webView->load(QUrl::fromLocalFile(fileName));
+        }
+    });
+    ui->web_page->show();
+
+
+
+
 
     timer->start(1000);
 }

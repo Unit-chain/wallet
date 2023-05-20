@@ -82,8 +82,3 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 # Link the executable with the Crypto++ library
 target_link_libraries(${PROJECT_NAME} PRIVATE ${CRYPTOPP})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::WebEngineWidgets)
-
-
-install(TARGETS ${PROJECT_NAME}
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
